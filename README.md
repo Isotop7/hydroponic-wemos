@@ -10,3 +10,5 @@ The used OLED uses 128x32px in landscape orientation. For easier managament of p
 | **Row 2** | temp icon    | temp value pipe 2 | pipe state icon | pipe 2 countdown |
 
 Icons are based on the wonderful [Ionicon collection](https://ionicons.com/).
+
+If you want to convert your icons you can use this awesome page: [image2cpp](https://javl.github.io/image2cpp/)

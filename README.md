@@ -8,3 +8,5 @@ The used OLED uses 128x32px in landscape orientation. For easier managament of p
 |-----------|:------------:|:-----------------:|:---------------:|:----------------:|
 | **Row 1** | temp icon    | temp value pipe 1 | pipe state icon | pipe 1 countdown |
 | **Row 2** | temp icon    | temp value pipe 2 | pipe state icon | pipe 2 countdown |
+
+Icons are based on the wonderful [Ionicon collection](https://ionicons.com/).

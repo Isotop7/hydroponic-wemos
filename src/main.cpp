@@ -166,19 +166,25 @@ void setup() {
     }
   }
 
+  //TODO: Needed for OLED, check as this is likely going to interfere with the temp sensors
+  //  +++ Wire bus +++
+  //Setup wire
   Wire.begin();
   Serial.print("+ I2C BUS | Wire setup complete");
 
+  //  +++ OLED screen +++
+  //Setup OLED and feed with internal source
   if(!oled.begin(SSD1306_SWITCHCAPVCC, OLED_I2C_BUS_ADDRESS)) {
     Serial.println("SSD1306 allocation failed");
     for(;;);
   }
 
+  // Set default values for OLED screen and show splash screen
+  oled.dim(true);
   oled.setTextSize(1);
   oled.setTextColor(WHITE);
-  oled.display();
   oled.setCursor(0, 0);
-  oled.println("hydro bootup done");
+  oled.println("hydro bootup done"); //TODO: Show splash pixel art instead of text
   oled.display();
   delay(2000);
 }
@@ -189,7 +195,7 @@ Arduino loop routine
 void loop() {
   //TODO: Control relais array
   //TODO: Read two temp sensors
-  //TODO: Update screen
+  //TODO: Update screen, use pixel art for pump and temperature
   //TODO: Read dip switch
 
   //Check if wemos is not connected to mqtt broker

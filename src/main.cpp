@@ -39,6 +39,7 @@ Define statements for OLED screen
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 32
 #define OLED_RESET -1
+//TODO: Add cordinates for icon squares
 
 /*
 Define statements for hydroponic unit

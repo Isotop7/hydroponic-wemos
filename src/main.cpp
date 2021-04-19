@@ -187,8 +187,10 @@ void setup() {
 Arduino loop routine
 */
 void loop() {
-  //TOOD: Control relais array
+  //TODO: Control relais array
   //TODO: Read two temp sensors
+  //TODO: Update screen
+  //TODO: Read dip switch
 
   //Check if wemos is not connected to mqtt broker
   if (!mqttClient.connected()) {

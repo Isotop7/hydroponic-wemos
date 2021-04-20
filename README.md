@@ -11,10 +11,11 @@
 
 ## additional hardware
 
-- Multiplexer PCF8574
-- SSD1306 OLED Screen 128x32px
+- 12V power supply
 - 12V-5V voltage regulator
 - 12V water pump
+- Multiplexer PCF8574
+- SSD1306 OLED Screen 128x32px
 - 4 channel relay breakout board
 - water resistant temperature sensor DS18B20
 

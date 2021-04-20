@@ -7,7 +7,59 @@
 #include <DallasTemperature.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <PCF8574.h>
 
+/*
+Define statements for OLED screen
+*/
+#define OLED_I2C_BUS_ADDRESS 0x3C
+#define OLED_WIDTH 128
+#define OLED_HEIGHT 32
+#define OLED_RESET -1
+//TODO: Add cordinates for icon squares
+
+/*
+Define statements for parallel multiplexer
+*/
+#define PCF8574AN_I2C_BUS_ADDRESS 0x38
+
+/*
+Define statements for hydroponic unit
+*/
+#define PIPE_COUNT 2
+#define PIPE_RELAIS_UP_TOPIC "hydro/pipe/X/up"
+#define PIPE_RELAIS_DOWN_TOPIC "hydro/pipe/X/down"
+#define PIPE_TEMP_TOPIC "hydro/pipe/X/temp"
+#define TEMP_PIN D6
+#define TEMP_READ_DELAY 60000
+
+/*
+Define statements for network
+Credentials are embedded in the wifiSecrets.h header file
+*/
+#include <wifiSecrets.h>
+#define MQTT_RECONNECT_DELAY 5000
+
+/*
+Create needed sensor modules
+*/
+Adafruit_SSD1306 oled(OLED_WIDTH, OLED_HEIGHT, &Wire, OLED_RESET);
+PCF8574 pcf(PCF8574AN_I2C_BUS_ADDRESS);
+OneWire tempBus (TEMP_PIN);
+DallasTemperature tempSensors(&tempBus);
+DeviceAddress _tempDeviceAddress;
+
+/*
+Create needed network objects
+*/
+WiFiClient espClient;
+PubSubClient mqttClient(espClient);
+
+/*
+Global hepler variables
+*/
+int tempSensorCount = 0;
+long lastTempRead = 0;
 const unsigned char ICON_TEMP [] PROGMEM = {
   // 'thermometer-outline', 16x16px
   0x00, 0x00, 0x03, 0xc0, 0x02, 0x40, 0x02, 0x40, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 
@@ -31,52 +83,6 @@ const unsigned char PUMP_NORMAL [] PROGMEM = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0xc0, 0x00, 0x60, 0x00, 0x30, 0x1f, 0xf8, 
   0x1f, 0xf8, 0x00, 0x30, 0x00, 0x60, 0x00, 0xc0, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-
-/*
-Define statements for OLED screen
-*/
-#define OLED_I2C_BUS_ADDRESS 0x3C
-#define OLED_WIDTH 128
-#define OLED_HEIGHT 32
-#define OLED_RESET -1
-//TODO: Add cordinates for icon squares
-
-/*
-Define statements for hydroponic unit
-*/
-#define PIPE_COUNT 2
-#define PIPE_RELAIS_UP_TOPIC "hydro/pipe/X/up"
-#define PIPE_RELAIS_DOWN_TOPIC "hydro/pipe/X/down"
-#define PIPE_TEMP_TOPIC "hydro/pipe/X/temp"
-#define TEMP_PIN D6
-#define TEMP_READ_DELAY 60000
-
-/*
-Define statements for network
-Credentials are embedded in the wifiSecrets.h header file
-*/
-#include <wifiSecrets.h>
-#define MQTT_RECONNECT_DELAY 5000
-
-/*
-Create needed sensor modules
-*/
-Adafruit_SSD1306 oled(OLED_WIDTH, OLED_HEIGHT, &Wire, OLED_RESET);
-OneWire tempBus (TEMP_PIN);
-DallasTemperature tempSensors(&tempBus);
-DeviceAddress _tempDeviceAddress;
-
-/*
-Create needed network objects
-*/
-WiFiClient espClient;
-PubSubClient mqttClient(espClient);
-
-/*
-Global hepler variables
-*/
-int tempSensorCount = 0;
-long lastTempRead = 0;
 
 /*
 Writes the deviceAdress to Serial
@@ -189,6 +195,15 @@ void setup() {
       printAddress(_tempDeviceAddress);
       Serial.println();
     }
+  }
+
+  //  +++ relay breakout board +++
+  //Check for connected pcf
+  if (pcf.isConnected()) {
+    // Setup pcf with initial value of zero (all relais off)
+    pcf.begin(0x00);
+  } else {
+    Serial.println("+ STATE | Can't connect to PCF and therefore can't switch relais");
   }
 
   //TODO: Needed for OLED, check as this is likely going to interfere with the temp sensors

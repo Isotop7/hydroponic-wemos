@@ -1,6 +1,6 @@
 # hydroponic-wemos
 
-## needed hardware
+## Parts list
 
 | Summary                       | URL                                                                                                                                       |
 |:------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
@@ -17,23 +17,23 @@
 | wooden plate                  | https://www.bauhaus.info/siebdruckplatten/siebdruckplatte-fixmass/p/22594871                                                              |
 
 
-Additional Hardware:
+### Additional Hardware:
 
 - Multiplexer PCF8574
 - SSD1306 OLED Screen 128x32px
 - 4 channel relay breakout board
 
-## pcb layout
+## PCB layout
 
 ![hardware layout](layout_v1.png)
 
 - version 1: add base layout
 
-## wemos d1 mini
+## Wemos D1 Mini
 
 - [Wemos D1 Mini Layout](https://www.wemos.cc/en/latest/d1/d1_mini.html)
 
-## oled layout
+## OLED layout
 
 The used OLED uses 128x32px in landscape orientation. For easier management of pixelart, the display is logically divided in 8x2 squares with 16x16px each and used for the following purposes:
 
